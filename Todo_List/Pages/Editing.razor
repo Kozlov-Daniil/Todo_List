@@ -1,0 +1,163 @@
+﻿@page "/edit"
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Редактирование задания</th>
+                    </tr>
+                </thead>
+
+            </table>
+            <div class="row mt-4">
+                <div class="col">
+                    <select class="col-12">
+                        <option>Сканирование компьютера</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row no-gutters mt-4">
+                <div class="col-2">
+                    <p class="text">Название задачи:</p>
+                </div>
+                <div class="col">
+                    <input class="form-control " placeholder="Планировщик задач" @bind="EditTodo" />
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-4">
+                    <p>Запуск задачи</p>
+                    <input type="radio" name="time" /> Однократно при запуске системы <br />
+                    <input type="radio" name="time" value="2" checked="@(selectGroup == 2)"  @onclick="@(()=>selectGroup = 2)" /> Однократно <br />
+                    <input type="radio" name="time" value="3" checked="@(selectGroup == 3)" @onclick="@(() => selectGroup = 3)" /> Многократно <br />
+                    <input type="radio" name="time" /> Ежедневно <br />
+                    <input type="radio" name="time" value="5" checked="@(selectGroup == 5)" @onclick="@(() => selectGroup = 5 )" /> Еженедельно
+                </div>
+                
+                <div class="col-4" id="form">
+                    @if (selectGroup==5)
+                    {
+                        <form id="0">
+                            <p>
+                                <label for="localdate">Время выполнения задачи:</label><br />
+                                <input type="datetime-local" id="localdate" name="date" />
+                            </p>
+                        </form>
+                    }
+                    else if (selectGroup==2)
+                    {
+                   
+                <form id="1">
+                    <label for="localdate">Дата и время запуска:</label><br />
+                    <input type="datetime-local" id="localdate" name="date" class="odnoc"/>
+                </form>
+                    }
+                    else if (selectGroup==3)
+                    {
+                <form id="2">
+                    <label for="localdate">Интервал между запусками задачи (мин):</label><br />
+                    <input type="text" id="text" name="interval" class="mnogoc" />
+                </form>
+                    }
+                    </div>
+                    <div class="col-4 " id="form">
+                        
+                       
+                       @if (selectGroup==5)
+                       { 
+                        <form class="mt-2">
+                            
+                            День недели:<br />
+                            <select class="nedel">
+                                <option>Понедельник</option>
+                                <option>Вторник</option>
+                                <option>Среда</option>
+                                <option>Четверг</option>
+                                <option>Пятница</option>
+                                <option>Суббота</option>
+                                <option>Воскресенье</option>
+                            </select>
+                        </form>
+                        }
+                    </div>
+                </div>
+                
+                
+            <div class="row">
+                <table class="table table-striped">
+                    <thead class="table">
+                        <tr>
+                            <th scope="col">Объекты сканирования</th>
+                        </tr>
+                    </thead>
+
+                </table>
+                <div class="col-6">
+                    <input type="checkbox" /> Загрузочные секттры <br />
+                    <input type="checkbox" /> Локальные диски <br />
+                    <input type="checkbox" /> Съёмные диски <br />
+                </div>
+                <div class="col-6">
+                    <input type="checkbox" /> Система<br />
+                    <input type="checkbox" /> Список <br />
+                    <input type="checkbox" /> Оперативная память<br />
+                </div>
+            </div>
+            <table class="table table-secondary">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Директории и файлы</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>  C:/Users/admin/</td>
+                    </tr>
+                </tbody>
+
+            </table>
+            <div class="btn-group mt-1" role="group" arial-label="Basic exapmple">
+                <div class="col">
+                    <button class="btn-dark" @onclick="AddTodo">Добавить</button>
+
+                    <button class="btn-dark">Редактировать</button>
+
+                    <button class="btn-dark">Удалить</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+
+
+   private int selectGroup = 0;
+
+
+    private string EditTodo;
+
+    private IList<TodoItem> todos = new List<TodoItem>();
+
+    private string newTodo;
+
+    public void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodo))
+        {
+            todos.Add(new TodoItem { Title = newTodo });
+            newTodo = string.Empty;
+        }
+    }
+
+    private void DeleteTodo(TodoItem deletedItem)
+    {
+        todos.Remove(deletedItem);
+    }
+}
